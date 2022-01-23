@@ -4,8 +4,7 @@ require("connectDB.php");
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-$id = intval($array->text1);
-$new_pass = $array->text2;
+$id = $array->text1;
 
 try{
     $dbh = new PDO($dsn, $user, $password);

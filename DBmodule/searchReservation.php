@@ -19,15 +19,17 @@ try{
     $params = array(':user_id' => $user_id);
     $stmt->execute($params);
 
-    $nreceivedData = array();
+    $reservationNreceivedData = array();
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-    $nreceivedData[]=array(
-    'reserve_id'=>$row['RESERVE_ID'],
-    'user_id'=>$row['USER_ID'],
-    'reserve_time'=>$row['RESERVE_TIME'],
-    'start'=>$row['START'],
-    'goal'=>$row['GOAL']
+    $reservationNreceivedData[]=array(
+    'RESERVE_ID'=>$row['RESERVE_ID'],
+    'USER_ID'=>$row['USER_ID'],
+    'RESERVE_TIME'=>$row['RESERVE_TIME'],
+    'START_LAT'=>$row['START_LAT'],
+    'START_LNG'=>$row['START_LNG'],
+    'GOAL_LAT'=>$row['GOAL_LAT'],
+    'GOAL_LNG'=>$row['GOAL_LNG']
     );
 }
 
@@ -41,15 +43,17 @@ try{
     $params = array(':user_id' => $user_id);
     $stmt->execute($params);
 
-    $orderedData = array();
+    $reservationOrderedData = array();
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-    $orderedData[]=array(
-    'reserve_id'=>$row['RESERVE_ID'],
-    'user_id'=>$row['USER_ID'],
-    'reserve_time'=>$row['RESERVE_TIME'],
-    'start'=>$row['START'],
-    'goal'=>$row['GOAL'],
+    $reservationOrderedData[]=array(
+    'RESERVE_ID'=>$row['RESERVE_ID'],
+    'USER_ID'=>$row['USER_ID'],
+    'RESERVE_TIME'=>$row['RESERVE_TIME'],
+    'START_LAT'=>$row['START_LAT'],
+    'START_LNG'=>$row['START_LNG'],
+    'GOAL_LAT'=>$row['GOAL_LAT'],
+    'GOAL_LNG'=>$row['GOAL_LNG'],
     'delay' =>$row['DELAY']
     );
 }
@@ -64,7 +68,7 @@ try{
       exit;
   }
 
-echo json_encode($nreceivedData);
-echo json_encode($orderedData);
+echo json_encode($reservationNreceivedData);
+echo json_encode($reservationOrderedData);
 
 ?>

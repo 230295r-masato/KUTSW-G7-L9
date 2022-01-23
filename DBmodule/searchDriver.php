@@ -4,8 +4,8 @@ require("connectDB.php"); //接続用ファイル
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-driver_id = $array->text1;
-
+//$driver_id = $array->text1;
+$driver_id = '88888888';
 try{
   // PDOインスタンスを生成
     $dbh = new PDO($dsn, $user, $password);
@@ -14,17 +14,20 @@ try{
     $sql = "SELECT * FROM DRIVER WHERE DRIVER_ID = :driver_id";
 
   // SQLステートメントを実行し、結果を変数に格納
-    $stmt = $dbh->query($sql);
+    $stmt = $dbh->prepare($sql);
+    $params = array(':driver_id' => $driver_id);
+    $stmt->execute($params);
 
-    $list = [];  //結果格納用配列
-  // foreach文で配列の中身を一行ずつ出力
-    foreach ($stmt as $row) {
-    // データベースのフィールド名で出力
-     array_push($list, $row['RESERVE_ID'].':'.$row['USER_ID'].':'.$row['RESERVE_TIME'].':'.$row['START'].':'.$row['GOAL']);
-      }
+    $driverData = array();  //結果格納用配列
 
-  $str = implode("\n", $list);
-  $ary = array('result'=>$str);
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+      $driverData[]=array(
+      'DRIVER_ID'=>$row['DRIVER_ID'],
+      'DRIVER_NAME'=>$row['DRIVER_NAME'],
+      'PASSWORD'=>$row['PASSWORD'],
+      'LINK'=>$row['LINK']
+    );
+}
 
   }catch (PDOException $e) {
 
@@ -35,6 +38,6 @@ try{
       exit;
   }
 
-echo json_encode($ary);
+echo json_encode($driverData, JSON_UNESCAPED_UNICODE);
 
 ?>

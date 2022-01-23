@@ -4,8 +4,8 @@ require("connectDB.php");
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-$reserve_id = intval($array->text1);
-$user_id = intval($array->text2);
+$reserve_id = $array->text1;
+$user_id = $array->text2;
 $reserve_time = $array->text3;
 $start = $array->text4;
 $goal = $array->text5;

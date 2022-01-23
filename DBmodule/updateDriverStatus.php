@@ -4,7 +4,7 @@ require("connectDB.php");
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-$id = intval($array->text1);
+$id = $array->text1;
 $new_status = $array->text2;
 
 try{
@@ -16,7 +16,6 @@ try{
     
  }catch(PDOException $e){
     $ary = array('result'=>'更新できません．');
-    echo json_encode($ary);
     exit;
  }
 

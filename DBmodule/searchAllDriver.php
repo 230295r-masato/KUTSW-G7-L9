@@ -15,14 +15,14 @@ try{
   // SQLステートメントを実行し、結果を変数に格納
     $stmt = $dbh->query($sql);
 
-    $driverData = array();
+    $allDriverData = array();
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-    $completeData[]=array(
-    'reserve_id'=>$row['RESERVE_ID'],
-    'user_name'=>$row['USER_NAME'],
-    'driver_id'=>$row['DRIVER_ID'],
-    'reserve_time'=>$row['RESERVE_TIME']
+    $allDriverData[]=array(
+    'DRIVER_ID'=>$row['DRIVER_ID'],
+    'DRIVER_NAME'=>$row['DRIVER_NAME'],
+    'PASSWORD'=>$row['PASSWORD'],
+    'LINK'=>$row['LINK']
     );
   }
   }catch (PDOException $e) {
@@ -34,6 +34,6 @@ try{
       exit;
   }
 
-//echo json_encode($ary);
+echo json_encode($allDriverData, JSON_UNESCAPED_UNICODE);
 
 ?>

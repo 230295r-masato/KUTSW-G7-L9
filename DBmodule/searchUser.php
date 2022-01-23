@@ -27,9 +27,6 @@ try{
     );
 }
 
-//  $str = implode("\n", $list);
-//  $ary = array('result'=>$str);
-
   }catch (PDOException $e) {
 
     // エラーメッセージを表示させる
@@ -39,6 +36,6 @@ try{
       exit;
   }
 
-echo json_encode($userData);
+echo json_encode($userData, JSON_UNESCAPED_UNICODE);
 
 ?>

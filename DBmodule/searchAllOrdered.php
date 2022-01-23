@@ -15,15 +15,20 @@ try{
   // SQLステートメントを実行し、結果を変数に格納
     $stmt = $dbh->query($sql);
 
-    $list = [];  //結果格納用配列
-  // foreach文で配列の中身を一行ずつ出力
-    foreach ($stmt as $row) {
-    // データベースのフィールド名で出力
-     array_push($list, $row['RESERVE_ID'].':'.$row['USER_ID'].':'.$row['RESERVE_TIME'].':'.$row['START'].':'.$row['GOAL'].':'.$row['DELAY']);
-      }
+    $allOrderedData = array();  //結果格納用配列
 
-  $str = implode("\n", $list);
-  $ary = array('result'=>$str);
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+      $allOrderedData[]=array(
+      'RESERVE_ID'=>$row['RESERVE_ID'],
+      'USER_ID'=>$row['USER_ID'],
+      'RESERVE_TIME'=>$row['RESERVE_TIME'],
+      'START_LAT'=>$row['START_LAT'],
+      'START_LNG'=>$row['START_LNG'],
+      'GOAL_LAT'=>$row['GOAL_LAT'],
+      'GOAL_LNG'=>$row['GOAL_LNG'],
+      'DELAY'=>$row['DELAY']
+    );
+}
 
   }catch (PDOException $e) {
 
@@ -34,6 +39,6 @@ try{
       exit;
   }
 
-echo json_encode($ary);
+echo json_encode($allOrderedData);
 
 ?>

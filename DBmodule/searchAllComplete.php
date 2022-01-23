@@ -3,31 +3,31 @@
 require("connectDB.php"); //接続用ファイル
 
 $json = file_get_contents('php://input');
-$array = json_decode($json);
-//$reserve_id = $array->text1;
-$reserve_id = '09999999';
+//$array = json_decode($json);
+
 try{
   // PDOインスタンスを生成
     $dbh = new PDO($dsn, $user, $password);
 
   // SELECT文を変数に格納
-    $sql = "SELECT START_LAT, START_LNG, GOAL_LAT, GOAL_LNG FROM ORDERED WHERE RESERVE_ID = :reserve_id";
+    $sql = "SELECT * FROM COMPLETE";
 
   // SQLステートメントを実行し、結果を変数に格納
-    $stmt = $dbh->prepare($sql);
-    $params = array(':reserve_id' => $reserve_id);
-    $stmt->execute($params);
 
-    $pointData = array();
+    $stmt = $dbh->query($sql);
+
+    $allCompleteData = array();
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-    $pointData[]=array(
-    'START_LAT'=>$row['START_LAT'],
-    'START_LNG'=>$row['START_LNG'],
-    'GOAL_LAT'=>$row['GOAL_LAT'],
-    'GOAT_LNG'=>$row['GOAL_LNG']
+    $allCompleteData[]=array(
+    'RESERVE_ID'=>$row['RESERVE_ID'],
+    'USER_ID'=>$row['USER_ID'],
+    'USER_NAME'=>$row['USER_NAME'],
+    'DRIVER_ID'=>$row['DRIVER_ID'],
+    'DRIVER_NAME'=>$row['DRIVER_NAME'],
+    'RESERVE_TIME'=>$row['RESERVE_TIME']
     );
-}
+  }
 
   }catch (PDOException $e) {
 
@@ -38,6 +38,6 @@ try{
       exit;
   }
 
-echo json_encode($pointData);
+echo json_encode($allCompleteData, JSON_UNESCAPED_UNICODE);
 
 ?>

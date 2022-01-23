@@ -14,27 +14,31 @@ try{
     $sql = "SELECT * FROM ORDERED WHERE RESERVE_ID = :reserve_id";
 
   // SQLステートメントを実行し、結果を変数に格納
-    $stmt = $dbh->query($sql);
+    $stmt = $dbh->prepare($sql);
+    $params = array(':reserve_id' => $reserve_id);
+    $stmt->execute($params);
 
-    $list = [];  //結果格納用配列
-  // foreach文で配列の中身を一行ずつ出力
-    foreach ($stmt as $row) {
-    // データベースのフィールド名で出力
-   array_push($list, $row['RESERVE_ID'].':'.$row['DRIVER_ID'].':'.$row['USER_ID'].':'.$row['RESERVE_TIME'].':'.$row['START'].':'.$row['GOAL'].':'.$row[DELAY]);
-      }
+    $orderedData = array();  //結果格納用配列
 
-//  $str = implode("\n", $list);
-//  $ary = array('result'=>$str);
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+      $orderedData[]=array(
+      'RESERVE_ID'=>$row['RESERVE_ID'],
+      'USER_ID'=>$row['USER_ID'],
+      'DRIVER_ID'=>$row['DRIVER_ID'],
+      'START_LAT'=>$row['START_LAT'],
+      'START_LNG'=>$row['START_LNG'],
+      'GOAL_LAT'=>$row['GOAL_LAT'],
+      'GOAL_LNG'=>$row['GOAL_LNG'],
+      'DELAY'=>$row['DELAY']
+    );
+}
 
   }catch (PDOException $e) {
-
-    // エラーメッセージを表示させる
-      //echo 'データベースにアクセスできません！' . $e->getMessage();
 
     // 強制終了
       exit;
   }
 
-//echo json_encode($ary);
+echo json_encode($orderedData);
 
 ?>

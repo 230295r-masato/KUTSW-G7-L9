@@ -4,8 +4,8 @@ require("connectDB.php"); //接続用ファイル
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-$reserve_id = $array->text1;
-
+//$reserve_id = $array->text1;
+$reserve_id = '09999999';
 try{
   // PDOインスタンスを生成
     $dbh = new PDO($dsn, $user, $password);
@@ -14,17 +14,23 @@ try{
     $sql = "SELECT * FROM NRECEIVED WHERE RESERVE_ID = :reserve_id";
 
   // SQLステートメントを実行し、結果を変数に格納
-    $stmt = $dbh->query($sql);
+    $stmt = $dbh->prepare($sql);
+    $params = array(':reserve_id' => $reserve_id);
+    $stmt->execute($params);
 
-    $list = [];  //結果格納用配列
-  // foreach文で配列の中身を一行ずつ出力
-    foreach ($stmt as $row) {
-    // データベースのフィールド名で出力
-   array_push($list, $row['RESERVE_ID'].':'.$row['USER_ID'].':'.$row['RESERVE_TIME'].':'.$row['START'].':'.$row['GOAL']);
-      }
+    $nreceivedData = array();  //結果格納用配列
 
-//  $str = implode("\n", $list);
-//  $ary = array('result'=>$str);
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+      $nreceivedData[]=array(
+      'RESERVE_ID'=>$row['RESERVE_ID'],
+      'USER_ID'=>$row['USER_ID'],
+      'RESERVE_TIME'=>$row['RESERVE_TIME'],
+      'START_LAT'=>$row['START_LAT'],
+      'START_LNG'=>$row['START_LNG'],
+      'GOAL_LAT'=>$row['GOAL_LAT'],
+      'GOAL_LNG'=>$row['GOAL_LNG']
+    );
+}
 
   }catch (PDOException $e) {
 
@@ -34,7 +40,6 @@ try{
     // 強制終了
       exit;
   }
-
-//echo json_encode($ary);
+echo json_encode($nreceivedData);
 
 ?>

@@ -2,32 +2,30 @@
 
 require("connectDB.php"); //接続用ファイル
 
-$json = file_get_contents('php://input');
-$array = json_decode($json);
-//$user_id = $array->text1;
-$user_id = '99999999';
+//$json = file_get_contents('php://input');
+//$array = json_decode($json);
+
 try{
   // PDOインスタンスを生成
     $dbh = new PDO($dsn, $user, $password);
 
   // SELECT文を変数に格納
-    $sql = "SELECT * FROM COMPLETE WHERE USER_ID = :user_id";
+    $sql = "SELECT * FROM NRECEIVED";
 
   // SQLステートメントを実行し、結果を変数に格納
-    $stmt = $dbh->prepare($sql);
-    $params = array(':user_id' => $user_id);
-    $stmt->execute($params);
+    $stmt = $dbh->query($sql);
 
-    $completeUserData = array();  //結果格納用配列
+    $allNreceivedData = array();  //結果格納用配列
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-      $completeUserData[]=array(
+      $allNreceivedData[]=array(
       'RESERVE_ID'=>$row['RESERVE_ID'],
       'USER_ID'=>$row['USER_ID'],
-      'USER_NAME'=>$row['USER_NAME'],
-      'DRIVER_ID'=>$row['DRIVER_ID'],
-      'DRIVER_NAME'=>$row['DRIVER_NAME'],
-      'RESERVE_TIME'=>$row['RESERVE_TIME']
+      'RESERVE_TIME'=>$row['RESERVE_TIME'],
+      'START_LAT'=>$row['START_LAT'],
+      'START_LNG'=>$row['START_LNG'],
+      'GOAL_LAT'=>$row['GOAL_LAT'],
+      'GOAL_LNG'=>$row['GOAL_LNG']
     );
 }
 
@@ -40,6 +38,6 @@ try{
       exit;
   }
 
-echo json_encode($completeUserData, JSON_UNESCAPED_UNICODE);
+echo json_encode($allNreceivedData);
 
 ?>
