@@ -15,7 +15,7 @@ try{
   // SQLステートメントを実行し、結果を変数に格納
     $stmt = $dbh->query($sql);
 
-    $userData = array();  //結果格納用配列
+    $allUserData = array();  //結果格納用配列
 
     while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
       $userData[]=array(
@@ -36,6 +36,6 @@ try{
       exit;
   }
 
-echo json_encode($userData, JSON_UNESCAPED_UNICODE);
+echo json_encode($allUserData, JSON_UNESCAPED_UNICODE);
 
 ?>
