@@ -4,7 +4,7 @@ require("connectDB.php");
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-$user_id = $array->text1);
+$user_id = $array->text1;
 $reserve_time = $array->text2;
 $start_lat = $array->text3;
 $start_lng = $array->text4;
