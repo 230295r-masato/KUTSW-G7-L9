@@ -4,17 +4,16 @@ require("connectDB.php");
 
 $json = file_get_contents('php://input');
 $array = json_decode($json);
-$id = $array->text1;
-$name = $array->text2;
-$mail = $array->text3;
-$pass = $array->text4;
-$birthday = $array->text5;
+$name = $array->text1;
+$mail = $array->text2;
+$pass = $array->text3;
+$birthday = $array->text4;
 
 try{
     $dbh = new PDO($dsn, $user, $password);
-    $sql = "INSERT INTO USER VALUES(:id, :name, :mail, :pass, :birthday)";
+    $sql = "INSERT INTO USER (USER_NAME, MAILADDRESS, PASSWORD, BIRTHDAY) VALUES(:name, :mail, :pass, :birthday)";
     $stmt = $dbh->prepare($sql);
-    $params = array(':id'=>$id, ':name'=>$name, ':mail'=>$mail, ':pass'=>$pass, ':birthday'=>$birthday);
+    $params = array(':name'=>$name, ':mail'=>$mail, ':pass'=>$pass, ':birthday'=>$birthday);
     $stmt->execute($params);
     
  }catch(PDOException $e){
